@@ -1,0 +1,41 @@
+<idea-plugin>
+    <id>de.cawolf.quick-mock</id>
+    <name>Quick Mock</name>
+    <vendor email="cawolf@cawolf.de" url="http://www.github.com/cawolf/phpstorm-quick-mock">cawolf</vendor>
+
+    <description><![CDATA[
+    Allows you to quickly create mock objects from within a test class.
+    ]]></description>
+
+    <change-notes><![CDATA[
+        <dl>
+            <dt>1.0.1</dt>
+            <dd>added gradle publishing support</dd>
+            <dt>1.0</dt>
+            <dd>initial release</dd>
+        </dl
+    ]]></change-notes>
+
+    <idea-version since-build="182" />
+
+    <extensions defaultExtensionNs="com.intellij">
+        <intentionAction>
+            <className>de.cawolf.quickmock.intention.QuickMockCreator</className>
+            <category>PHP</category>
+            <descriptionDirectoryName>QuickMockCreator</descriptionDirectoryName>
+        </intentionAction>
+
+        <projectService serviceImplementation="de.cawolf.quickmock.intention.service.AddArguments" />
+        <projectService serviceImplementation="de.cawolf.quickmock.intention.service.AddMissingUseStatements" />
+        <projectService serviceImplementation="de.cawolf.quickmock.intention.service.AddMockAssignment" />
+        <projectService serviceImplementation="de.cawolf.quickmock.intention.service.AddProperty" />
+        <projectService serviceImplementation="de.cawolf.quickmock.intention.service.ReformatTestcase" />
+    </extensions>
+
+    <depends>com.jetbrains.php</depends>
+    <depends>com.intellij.modules.lang</depends>
+    <depends>com.intellij.modules.platform</depends>
+
+    <actions>
+    </actions>
+</idea-plugin>

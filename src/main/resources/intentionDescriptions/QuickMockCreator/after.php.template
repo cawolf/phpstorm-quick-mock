@@ -1,0 +1,12 @@
+/** @var ServiceOne */
+private $dependencyOne;
+
+/** @var ServiceTwo */
+private $dependencyTwo;
+
+public function test()
+{
+    $this->dependencyOne = $this->prophesize(ServiceOne::class);
+    $this->dependencyTwo = $this->prophesize(ServiceTwo::class);
+    $subjectUnderTest = new Subject($this->dependencyOne, $this->dependencyTwo);
+}
