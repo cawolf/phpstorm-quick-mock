@@ -1,4 +1,6 @@
 # Quick Mock
+[![Build Status](https://travis-ci.com/cawolf/phpstorm-quick-mock.svg?branch=master)](https://travis-ci.com/cawolf/phpstorm-quick-mock)
+
 PHPStorm plugin allowing you to quickly create mock objects from within a test class
 
 When writing tests for classes with constructor dependencies (e.g. every composed service in a DI framework like
