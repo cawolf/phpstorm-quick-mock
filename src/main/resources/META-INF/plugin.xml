@@ -9,6 +9,8 @@
 
     <change-notes><![CDATA[
         <dl>
+            <dt>1.0.2</dt>
+            <dd>added "->reveal()" to constructor arguments (issue #1)</dd>
             <dt>1.0.1</dt>
             <dd>added gradle publishing support</dd>
             <dt>1.0</dt>

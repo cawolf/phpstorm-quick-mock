@@ -10,7 +10,7 @@ apply plugin: 'org.jetbrains.intellij'
 apply plugin: 'java'
 
 group 'de.cawolf'
-version '1.0.1'
+version '1.0.2'
 
 sourceCompatibility = 1.8
 
