@@ -84,7 +84,7 @@ Place your cursor in the empty constructor argument list of a subject under test
         {
             $this->logger = $this->prophesize(LoggerInterface::class);
             $this->router = $this->prophesize(RouterInterface::class);
-            $this->subject = new Subject($this->logger, $this->router);
+            $this->subject = new Subject($this->logger->reveal(), $this->router->reveal());
         }
         
         public function testBusinessLogic()
