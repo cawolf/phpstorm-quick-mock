@@ -9,6 +9,12 @@
 
     <change-notes><![CDATA[
         <dl>
+            <dt>1.1.0</dt>
+            <dd>added ObjectProphecy doc (issue #8)</dd>
+            <dd>show intention if there are whitespaces between parenthesis (issue #7)</dd>
+            <dd>show intention not only between parenthesis (issue #6)</dd>
+            <dd>added whitespace between mocks and subject creation (issue #5)</dd>
+            <dd>do not mock primitives anymore (issue #4)</dd>
             <dt>1.0.2</dt>
             <dd>added "->reveal()" to constructor arguments (issue #1)</dd>
             <dt>1.0.1</dt>
