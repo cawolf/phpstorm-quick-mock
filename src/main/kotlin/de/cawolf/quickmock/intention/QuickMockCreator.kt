@@ -6,32 +6,23 @@ import com.intellij.openapi.components.ServiceManager
 import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiElement
-import com.intellij.psi.PsiWhiteSpace
 import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.util.IncorrectOperationException
 import com.jetbrains.php.lang.psi.elements.*
-import com.jetbrains.php.lang.psi.elements.impl.NewExpressionImpl
 import de.cawolf.quickmock.intention.service.*
 
 class QuickMockCreator : PsiElementBaseIntentionAction(), IntentionAction {
 
     override fun getText(): String {
-        return "Create mocks for all parameters of the constructor"
+        return "Quick Mock: add constructor prophecies"
     }
 
     override fun getFamilyName(): String = text
 
-    override fun isAvailable(project: Project, editor: Editor, psiElement: PsiElement) =
-            psiElement.parent is NewExpression && emptyParameterList(psiElement)
-
-    private fun emptyParameterList(psiElement: PsiElement) =
-            when {
-                psiElement.textMatches(")") -> psiElement.prevSibling is ParameterList
-                        && psiElement.prevSibling.children.isEmpty()
-                psiElement is PsiWhiteSpace -> psiElement.nextSibling is ParameterList
-                        && psiElement.nextSibling.children.isEmpty()
-                else -> false
-            }
+    override fun isAvailable(project: Project, editor: Editor, psiElement: PsiElement): Boolean {
+        val newExpression = PsiTreeUtil.getParentOfType(psiElement, NewExpression::class.java)
+        return newExpression is NewExpression && (newExpression.parameterList?.children?.isEmpty() ?: false)
+    }
 
     @Throws(IncorrectOperationException::class)
     override fun invoke(project: Project, editor: Editor, psiElement: PsiElement) {
@@ -49,6 +40,8 @@ class QuickMockCreator : PsiElementBaseIntentionAction(), IntentionAction {
                 ?: return
         val constructStatement = PsiTreeUtil.getParentOfType(psiElement, AssignmentExpression::class.java)
                 ?: return
+        val parameterList = PsiTreeUtil.getParentOfType(psiElement, NewExpression::class.java)?.parameterList
+                ?: return
 
         // get helper services
         val addArguments = ServiceManager.getService(project, AddArguments::class.java)
@@ -56,6 +49,7 @@ class QuickMockCreator : PsiElementBaseIntentionAction(), IntentionAction {
         val addMockAssignment = ServiceManager.getService(project, AddMockAssignment::class.java)
         val addProperty = ServiceManager.getService(project, AddProperty::class.java)
         val reformatTestcase = ServiceManager.getService(project, ReformatTestcase::class.java)
+        val removeSurroundingWhitespaces = ServiceManager.getService(project, RemoveSurroundingWhitespaces::class.java)
 
         // actually create mocks
         var currentAnchor = beginningOfClass
@@ -64,12 +58,13 @@ class QuickMockCreator : PsiElementBaseIntentionAction(), IntentionAction {
             addMockAssignment.invoke(project, constructStatement, parameter)
             currentAnchor = addProperty.invoke(project, parameter, currentAnchor, clazz)
         }
-        addArguments.invoke(psiElement, parameters, project)
-        reformatTestcase.invoke(project, psiElement, clazz)
+        removeSurroundingWhitespaces.invoke(parameterList)
+        addArguments.invoke(parameterList, parameters, project)
+        reformatTestcase.invoke(project, currentAnchor, clazz)
     }
 
     private fun getConstructorParameters(psiElementAtCursor: PsiElement): MutableList<Parameter> {
-        val newExpression = psiElementAtCursor.parent as NewExpressionImpl
+        val newExpression = PsiTreeUtil.getParentOfType(psiElementAtCursor, NewExpression::class.java) as NewExpression
         val classReference = newExpression.classReference
         val method = classReference?.resolve() as Method
         return method.parameters.toMutableList()
