@@ -10,11 +10,11 @@ import com.jetbrains.php.lang.psi.elements.Parameter
 import com.jetbrains.php.lang.psi.visitors.PhpElementVisitor
 
 class AddArguments {
-    fun invoke(psiElementAtCursor: PsiElement, parameter: MutableList<Parameter>, project: Project) {
+    fun invoke(parameterList: PsiElement, parameter: MutableList<Parameter>, project: Project) {
         val parameterListType = IElementType.enumerate { it -> it.toString() == "Parameter list" }.first()
         val joinedParameterValues = parameter.joinToString { it -> createParameterValueFromType(it) }
         val newParameterList = createFirstFromText(project, parameterListType, "f($joinedParameterValues);")
-        psiElementAtCursor.prevSibling.replace(newParameterList)
+        parameterList.replace(newParameterList)
     }
 
     private fun createParameterValueFromType(it: Parameter) =
