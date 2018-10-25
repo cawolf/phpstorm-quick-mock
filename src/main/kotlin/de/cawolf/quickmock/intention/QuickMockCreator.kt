@@ -57,7 +57,10 @@ class QuickMockCreator : PsiElementBaseIntentionAction(), IntentionAction {
         for (parameter in parameters) {
             addMissingUseStatements.invoke(namespace, parameter)
             addMockAssignment.invoke(project, constructStatement, parameter)
-            currentAnchor = addProperty.invoke(project, parameter, currentAnchor, clazz)
+
+            if (!PRIMITIVES_NOT_TO_ADD_OR_MOCK.contains(parameter.type.toString())) {
+                currentAnchor = addProperty.invoke(project, parameter, currentAnchor, clazz)
+            }
         }
         addArguments.invoke(psiElement, parameters, project)
         reformatTestcase.invoke(project, psiElement, clazz)
