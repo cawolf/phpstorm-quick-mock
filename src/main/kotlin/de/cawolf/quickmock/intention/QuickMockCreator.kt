@@ -54,8 +54,9 @@ class QuickMockCreator : PsiElementBaseIntentionAction(), IntentionAction {
 
         // actually create mocks
         var currentAnchor = beginningOfClass
+        addMissingUseStatements.invoke(namespace, "\\Prophecy\\Prophecy\\ObjectProphecy")
         for (parameter in parameters) {
-            addMissingUseStatements.invoke(namespace, parameter)
+            addMissingUseStatements.invoke(namespace, parameter.type.toString())
             addMockAssignment.invoke(project, constructStatement, parameter)
             currentAnchor = addProperty.invoke(project, parameter, currentAnchor, clazz)
         }
