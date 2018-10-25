@@ -6,6 +6,7 @@ import com.intellij.openapi.components.ServiceManager
 import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiElement
+import com.intellij.psi.PsiWhiteSpace
 import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.util.IncorrectOperationException
 import com.jetbrains.php.lang.psi.elements.*
@@ -20,13 +21,17 @@ class QuickMockCreator : PsiElementBaseIntentionAction(), IntentionAction {
 
     override fun getFamilyName(): String = text
 
-    override fun isAvailable(project: Project, editor: Editor, psiElement: PsiElement): Boolean {
-        return (psiElement.parent is NewExpression
-                && psiElement.textMatches(")")
-                && psiElement.prevSibling is ParameterList
-                && psiElement.prevSibling.children.isEmpty()
-                && psiElement.prevSibling.prevSibling.textMatches("("))
-    }
+    override fun isAvailable(project: Project, editor: Editor, psiElement: PsiElement) =
+            psiElement.parent is NewExpression && emptyParameterList(psiElement)
+
+    private fun emptyParameterList(psiElement: PsiElement) =
+            when {
+                psiElement.textMatches(")") -> psiElement.prevSibling is ParameterList
+                        && psiElement.prevSibling.children.isEmpty()
+                psiElement is PsiWhiteSpace -> psiElement.nextSibling is ParameterList
+                        && psiElement.nextSibling.children.isEmpty()
+                else -> false
+            }
 
     @Throws(IncorrectOperationException::class)
     override fun invoke(project: Project, editor: Editor, psiElement: PsiElement) {
