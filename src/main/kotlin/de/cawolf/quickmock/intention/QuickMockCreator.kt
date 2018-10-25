@@ -6,8 +6,10 @@ import com.intellij.openapi.components.ServiceManager
 import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiElement
+import com.intellij.psi.PsiWhiteSpace
 import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.util.IncorrectOperationException
+import com.jetbrains.php.lang.psi.PhpPsiElementFactory
 import com.jetbrains.php.lang.psi.elements.*
 import com.jetbrains.php.lang.psi.elements.impl.NewExpressionImpl
 import de.cawolf.quickmock.intention.service.*
@@ -58,10 +60,19 @@ class QuickMockCreator : PsiElementBaseIntentionAction(), IntentionAction {
         for (parameter in parameters) {
             addMissingUseStatements.invoke(namespace, parameter.type.toString())
             addMockAssignment.invoke(project, constructStatement, parameter)
-            currentAnchor = addProperty.invoke(project, parameter, currentAnchor, clazz)
+
+            if (!PRIMITIVES_NOT_TO_ADD_OR_MOCK.contains(parameter.type.toString())) {
+                currentAnchor = addProperty.invoke(project, parameter, currentAnchor, clazz)
+            }
         }
+        addWhitespaceBetweenMockAssignmentsAnConstructor(constructStatement, project)
         addArguments.invoke(psiElement, parameters, project)
         reformatTestcase.invoke(project, psiElement, clazz)
+    }
+
+    private fun addWhitespaceBetweenMockAssignmentsAnConstructor(constructStatement: PsiElement, project: Project) {
+        val currentMethod = constructStatement.parent
+        currentMethod.addBefore(PhpPsiElementFactory.createFromText(project, PsiWhiteSpace::class.java, "\n")!!, constructStatement)
     }
 
     private fun getConstructorParameters(psiElementAtCursor: PsiElement): MutableList<Parameter> {
