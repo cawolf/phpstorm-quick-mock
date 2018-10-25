@@ -13,7 +13,7 @@ class AddProperty {
         val docCommentType = IElementType.enumerate { it -> it.toString() == "PhpDocComment" }.first()
 
         val field = PhpPsiElementFactory.createFromText(project, classFieldsType, "class C { private \$${parameter.name}; }")
-        val docBlock = PhpPsiElementFactory.createFromText(project, docCommentType, "/** @var ${parameter.node.firstChildNode.text} */\n\$foo = null;")
+        val docBlock = PhpPsiElementFactory.createFromText(project, docCommentType, "/** @var ${parameter.node.firstChildNode.text}|ObjectProphecy */\n\$foo = null;")
 
         val docBlockAnchor = clazz.addAfter(docBlock, currentAnchor)
         return clazz.addAfter(field, docBlockAnchor)
