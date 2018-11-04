@@ -11,13 +11,13 @@ import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.util.IncorrectOperationException
 import com.jetbrains.php.lang.psi.PhpPsiElementFactory
 import com.jetbrains.php.lang.psi.elements.*
+import de.cawolf.quickmock.Settings
 import de.cawolf.quickmock.intention.service.*
+import java.util.*
 
 class QuickMockCreator : PsiElementBaseIntentionAction(), IntentionAction {
 
-    override fun getText(): String {
-        return "Quick Mock: add constructor prophecies"
-    }
+    override fun getText(): String = ResourceBundle.getBundle(RESOURCE_BUNDLE).getString("intention.label")
 
     override fun getFamilyName(): String = text
 
@@ -52,16 +52,20 @@ class QuickMockCreator : PsiElementBaseIntentionAction(), IntentionAction {
         val addProperty = ServiceManager.getService(project, AddProperty::class.java)
         val reformatTestcase = ServiceManager.getService(project, ReformatTestcase::class.java)
         val removeSurroundingWhitespaces = ServiceManager.getService(project, RemoveSurroundingWhitespaces::class.java)
+        val settings = ServiceManager.getService(Settings::class.java)
 
         // actually create mocks
         var currentAnchor = beginningOfClass
-        addMissingUseStatements.invoke(namespace, "\\Prophecy\\Prophecy\\ObjectProphecy")
+        if (settings.addDocBlockForMembers) {
+            addMissingUseStatements.invoke(namespace, "\\Prophecy\\Prophecy\\ObjectProphecy")
+        }
+
         for (parameter in parameters) {
             addMissingUseStatements.invoke(namespace, parameter.type.toString())
             addMockAssignment.invoke(project, constructStatement, parameter)
 
             if (!PRIMITIVES_NOT_TO_ADD_OR_MOCK.contains(parameter.type.toString())) {
-                currentAnchor = addProperty.invoke(project, parameter, currentAnchor, clazz)
+                currentAnchor = addProperty.invoke(project, parameter, currentAnchor, clazz, settings.addDocBlockForMembers)
             }
         }
         addWhitespaceBetweenMockAssignmentsAnConstructor(constructStatement, project)

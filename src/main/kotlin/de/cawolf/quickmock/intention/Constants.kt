@@ -1,5 +1,7 @@
 package de.cawolf.quickmock.intention
 
+const val RESOURCE_BUNDLE = "QuickMock"
+
 @JvmField
 val PRIMITIVES_NOT_TO_ADD_OR_MOCK = arrayOf(
         "string",
