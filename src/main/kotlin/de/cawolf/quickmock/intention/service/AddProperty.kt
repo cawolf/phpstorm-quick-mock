@@ -8,14 +8,18 @@ import com.jetbrains.php.lang.psi.elements.Parameter
 import com.jetbrains.php.lang.psi.elements.PhpClass
 
 class AddProperty {
-    fun invoke(project: Project, parameter: Parameter, currentAnchor: PsiElement, clazz: PhpClass): PsiElement {
+    fun invoke(project: Project, parameter: Parameter, currentAnchor: PsiElement, clazz: PhpClass, addDocBlockForMembers: Boolean): PsiElement {
         val classFieldsType = IElementType.enumerate { it -> it.toString() == "Class fields" }.first()
         val docCommentType = IElementType.enumerate { it -> it.toString() == "PhpDocComment" }.first()
 
         val field = PhpPsiElementFactory.createFromText(project, classFieldsType, "class C { private \$${parameter.name}; }")
-        val docBlock = PhpPsiElementFactory.createFromText(project, docCommentType, "/** @var ${parameter.node.firstChildNode.text}|ObjectProphecy */\n\$foo = null;")
+        val fieldAnchor = clazz.addAfter(field, currentAnchor)
 
-        val docBlockAnchor = clazz.addAfter(docBlock, currentAnchor)
-        return clazz.addAfter(field, docBlockAnchor)
+        if (addDocBlockForMembers) {
+            val docBlock = PhpPsiElementFactory.createFromText(project, docCommentType, "/** @var ${parameter.node.firstChildNode.text}|ObjectProphecy */\n\$foo = null;")
+            clazz.addBefore(docBlock, fieldAnchor)
+        }
+
+        return fieldAnchor
     }
 }

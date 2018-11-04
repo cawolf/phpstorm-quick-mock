@@ -33,6 +33,10 @@
             <descriptionDirectoryName>QuickMockCreator</descriptionDirectoryName>
         </intentionAction>
 
+        <applicationService serviceImplementation="de.cawolf.quickmock.Settings" />
+
+        <applicationConfigurable instance="de.cawolf.quickmock.Configuration" parentId="reference.webide.settings.project.settings.php" />
+
         <projectService serviceImplementation="de.cawolf.quickmock.intention.service.AddArguments" />
         <projectService serviceImplementation="de.cawolf.quickmock.intention.service.AddMissingUseStatements" />
         <projectService serviceImplementation="de.cawolf.quickmock.intention.service.AddMockAssignment" />
