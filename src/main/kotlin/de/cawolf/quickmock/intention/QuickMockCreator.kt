@@ -23,7 +23,9 @@ class QuickMockCreator : PsiElementBaseIntentionAction(), IntentionAction {
 
     override fun isAvailable(project: Project, editor: Editor, psiElement: PsiElement): Boolean {
         val newExpression = PsiTreeUtil.getParentOfType(psiElement, NewExpression::class.java)
-        return newExpression is NewExpression && (newExpression.parameterList?.children?.isEmpty() ?: false)
+        return newExpression is NewExpression
+                && newExpression.classReference?.resolve() is Method
+                && (newExpression.parameterList?.children?.isEmpty() ?: false)
     }
 
     @Throws(IncorrectOperationException::class)
