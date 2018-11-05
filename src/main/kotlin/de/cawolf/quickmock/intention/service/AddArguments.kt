@@ -8,26 +8,18 @@ import com.intellij.psi.tree.IElementType
 import com.jetbrains.php.lang.PhpFileType
 import com.jetbrains.php.lang.psi.elements.Parameter
 import com.jetbrains.php.lang.psi.visitors.PhpElementVisitor
+import de.cawolf.quickmock.intention.PRIMITIVES
 
 class AddArguments {
     fun invoke(parameterList: PsiElement, parameter: MutableList<Parameter>, project: Project) {
         val parameterListType = IElementType.enumerate { it -> it.toString() == "Parameter list" }.first()
-        val joinedParameterValues = parameter.joinToString { it -> createParameterValueFromType(it) }
+        val joinedParameterValues = parameter.joinToString { it -> "\$this->${it.name}${addReveal(it)}" }
         val newParameterList = createFirstFromText(project, parameterListType, "f($joinedParameterValues);")
         parameterList.replace(newParameterList)
     }
 
-    private fun createParameterValueFromType(it: Parameter) =
-        when (it.type.toString()) {
-            "string" -> "''"
-            "int" -> "0"
-            "float" -> "0.0"
-            "bool" -> "true"
-            "array" -> "[]"
-            "" -> "null" // mixed
-            "object" -> "\$this->" + it.name
-            else -> "\$this->" + it.name + "->reveal()"
-        }
+    private fun addReveal(it: Parameter) =
+            if (PRIMITIVES.contains(it.type.toString())) "" else "->reveal()"
 
     private fun createFirstFromText(p: Project, elementType: IElementType, text: String): PsiElement {
         var ret = arrayOf<PsiElement>()
@@ -45,6 +37,6 @@ class AddArguments {
     }
 
     private fun createDummyFile(p: Project, fileText: String): PsiFile =
-            PsiFileFactory.getInstance(p).createFileFromText("DUMMY__." + PhpFileType.INSTANCE.defaultExtension, PhpFileType.INSTANCE, "<?php\n$fileText", System.currentTimeMillis(), false)
+            PsiFileFactory.getInstance(p).createFileFromText("DUMMY__.${PhpFileType.INSTANCE.defaultExtension}", PhpFileType.INSTANCE, "<?php\n$fileText", System.currentTimeMillis(), false)
 
 }
