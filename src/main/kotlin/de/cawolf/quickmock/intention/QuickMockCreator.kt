@@ -58,18 +58,19 @@ class QuickMockCreator : PsiElementBaseIntentionAction(), IntentionAction {
 
         // actually create mocks
         var currentAnchor = beginningOfClass
-        if (settings.addDocBlockForMembers) {
+        var nonPrimitiveMocked = false
+
+        for (parameter in parameters) {
+            nonPrimitiveMocked = addMissingUseStatements.invoke(namespace, parameter.type.toString()) || nonPrimitiveMocked
+            addMockAssignment.invoke(project, constructStatement, parameter)
+
+            currentAnchor = addProperty.invoke(project, parameter, currentAnchor, clazz, settings.addDocBlockForMembers)
+        }
+
+        if (settings.addDocBlockForMembers && nonPrimitiveMocked) {
             addMissingUseStatements.invoke(namespace, "\\Prophecy\\Prophecy\\ObjectProphecy")
         }
 
-        for (parameter in parameters) {
-            addMissingUseStatements.invoke(namespace, parameter.type.toString())
-            addMockAssignment.invoke(project, constructStatement, parameter)
-
-            if (!PRIMITIVES_NOT_TO_ADD_OR_MOCK.contains(parameter.type.toString())) {
-                currentAnchor = addProperty.invoke(project, parameter, currentAnchor, clazz, settings.addDocBlockForMembers)
-            }
-        }
         addWhitespaceBetweenMockAssignmentsAnConstructor(constructStatement, project)
         removeSurroundingWhitespaces.invoke(parameterList)
         addArguments.invoke(parameterList, parameters, project)

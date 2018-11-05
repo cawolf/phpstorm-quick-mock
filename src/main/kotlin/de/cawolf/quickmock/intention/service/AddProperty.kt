@@ -6,6 +6,7 @@ import com.intellij.psi.tree.IElementType
 import com.jetbrains.php.lang.psi.PhpPsiElementFactory
 import com.jetbrains.php.lang.psi.elements.Parameter
 import com.jetbrains.php.lang.psi.elements.PhpClass
+import de.cawolf.quickmock.intention.PRIMITIVES
 
 class AddProperty {
     fun invoke(project: Project, parameter: Parameter, currentAnchor: PsiElement, clazz: PhpClass, addDocBlockForMembers: Boolean): PsiElement {
@@ -16,7 +17,8 @@ class AddProperty {
         val fieldAnchor = clazz.addAfter(field, currentAnchor)
 
         if (addDocBlockForMembers) {
-            val docBlock = PhpPsiElementFactory.createFromText(project, docCommentType, "/** @var ${parameter.node.firstChildNode.text}|ObjectProphecy */\n\$foo = null;")
+            val objectProphecy = if (PRIMITIVES.contains(parameter.type.toString())) "" else "|ObjectProphecy"
+            val docBlock = PhpPsiElementFactory.createFromText(project, docCommentType, "/** @var ${parameter.node.firstChildNode.text}$objectProphecy */\n\$foo = null;")
             clazz.addBefore(docBlock, fieldAnchor)
         }
 
