@@ -10,11 +10,15 @@ When writing tests for classes with constructor dependencies (e.g. every compose
 Templates" can help with the test case skeleton, the actual class dependencies have to be mocked manually.
 
 Now, you can use this PHPStorm plugin to automatically generate mocks for these dependencies. Place your cursor in the empty
-constructor argument list, trigger code intentions (default: `ALT + ENTER`) and select `Create mocks for all parameters 
-of the constructor` - done!
+constructor argument list, trigger code intentions (default: `ALT + ENTER`) and select `Quick Mock: add constructor prophecies` - done!
 
 ## Install
 Install the plugin by going to `Settings -> Plugins -> Browse repositories` and then search for `Quick Mock`
+
+## Options
+You can configure the plugin under `Languages and Frameworks -> PHP -> Quick Mock`. Available options:
+
+* add DocBlock for generated members: if checked, a DocBlock will be generated for generated mock members
 
 ## Usage
 Let's assume you have this business service:
@@ -63,8 +67,8 @@ Whenever you begin writing a unit test case, you will inevitably come to the sub
         }
     }
 
-Place your cursor in the empty constructor argument list of a subject under test, trigger code intentions (default: 
-`ALT + ENTER`) and select `Create mocks for all parameters of the constructor` - done!
+Place your cursor anywhere at the `new` expression of a subject under test, trigger code intentions (default: 
+`ALT + ENTER`) and select `Quick Mock: add constructor prophecies` - done!
 
 
     use Psr\Log\LoggerInterface;

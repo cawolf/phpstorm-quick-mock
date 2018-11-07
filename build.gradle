@@ -10,7 +10,7 @@ apply plugin: 'org.jetbrains.intellij'
 apply plugin: 'java'
 
 group 'de.cawolf'
-version '1.1.0'
+version '1.2.0'
 
 sourceCompatibility = 1.8
 
@@ -40,9 +40,4 @@ intellij {
     ]
 
     pluginName 'Quick Mock'
-}
-
-publishPlugin {
-    username hasProperty('intellijPublishUsername') ? intellijPublishUsername : 'foo'
-    password hasProperty('intellijPublishPassword') ? intellijPublishPassword : 'bar'
 }
