@@ -40,9 +40,13 @@
         <projectService serviceImplementation="de.cawolf.quickmock.intention.service.AddArguments" />
         <projectService serviceImplementation="de.cawolf.quickmock.intention.service.AddMissingUseStatements" />
         <projectService serviceImplementation="de.cawolf.quickmock.intention.service.AddMockAssignment" />
+        <projectService serviceImplementation="de.cawolf.quickmock.intention.service.AddNewlineBefore" />
         <projectService serviceImplementation="de.cawolf.quickmock.intention.service.AddProperty" />
+        <projectService serviceImplementation="de.cawolf.quickmock.intention.service.ConstructorParameters" />
+        <projectService serviceImplementation="de.cawolf.quickmock.intention.service.ExistingMocks" />
         <projectService serviceImplementation="de.cawolf.quickmock.intention.service.ReformatTestcase" />
         <projectService serviceImplementation="de.cawolf.quickmock.intention.service.RemoveSurroundingWhitespaces" />
+        <projectService serviceImplementation="de.cawolf.quickmock.intention.service.RemoveWhitespaceBeforeConstruct" />
     </extensions>
 
     <depends>com.jetbrains.php</depends>
