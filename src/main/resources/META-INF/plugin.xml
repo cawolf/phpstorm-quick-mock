@@ -29,7 +29,7 @@
         </dl
     ]]></change-notes>
 
-    <idea-version since-build="182" />
+    <idea-version since-build="182.4129" />
 
     <extensions defaultExtensionNs="com.intellij">
         <intentionAction>
