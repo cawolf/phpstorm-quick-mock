@@ -9,6 +9,8 @@
 
     <change-notes><![CDATA[
         <dl>
+            <dt>1.2.1</dt>
+            <dd>updated meta information</dd>
             <dt>1.2.0</dt>
             <dd>do not regenerate mocks if already present (issue #18)</dd>
             <dd>added configuration for addition of doc blocks (issue #15)</dd>

@@ -1,3 +1,6 @@
+# v1.2.1
+* updated meta information to keep plugin enabled in newer PHPStorm versions
+
 # v1.2.0
 * do not regenerate mocks if already present (#18)
 * added configuration for addition of doc blocks (#15)
