@@ -35,6 +35,7 @@ compileTestKotlin {
 intellij {
     type 'IU'
     version ideaVersion
+    updateSinceUntilBuild false
     plugins [
         "com.jetbrains.php:${phpPluginVersion}"
     ]
