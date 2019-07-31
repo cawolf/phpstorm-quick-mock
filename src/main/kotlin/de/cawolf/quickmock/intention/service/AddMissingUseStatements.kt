@@ -6,12 +6,12 @@ import com.jetbrains.php.refactoring.PhpAliasImporter
 import de.cawolf.quickmock.intention.PRIMITIVES
 
 class AddMissingUseStatements {
-    fun invoke(namespace: PsiElement, fqcn: String): Boolean {
+    fun invoke(namespace: PsiElement, fqcn: String, alias: String?): Boolean {
         if (PRIMITIVES.contains(fqcn)) return false
 
         val scopeHolder = PhpCodeInsightUtil.findScopeForUseOperator(namespace)
         if (scopeHolder != null && PhpCodeInsightUtil.alreadyImported(scopeHolder, fqcn) == null && PhpCodeInsightUtil.canImport(scopeHolder, fqcn)) {
-            PhpAliasImporter.insertUseStatement(fqcn, scopeHolder)
+            PhpAliasImporter.insertUseStatement(fqcn, alias, scopeHolder)
         }
         return true
     }
