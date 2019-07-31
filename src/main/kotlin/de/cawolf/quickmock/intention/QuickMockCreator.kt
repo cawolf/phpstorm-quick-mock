@@ -46,6 +46,7 @@ class QuickMockCreator : PsiElementBaseIntentionAction(), IntentionAction {
         val addMissingUseStatements = ServiceManager.getService(project, AddMissingUseStatements::class.java)
         val addMockAssignment = ServiceManager.getService(project, AddMockAssignment::class.java)
         val addProperty = ServiceManager.getService(project, AddProperty::class.java)
+        val aliasedUseStatements = ServiceManager.getService(project, AliasedUseStatements::class.java)
         val reformatTestcase = ServiceManager.getService(project, ReformatTestcase::class.java)
         val removeSurroundingWhitespaces = ServiceManager.getService(project, RemoveSurroundingWhitespaces::class.java)
         val constructorParameters = ServiceManager.getService(project, ConstructorParameters::class.java)
@@ -59,18 +60,20 @@ class QuickMockCreator : PsiElementBaseIntentionAction(), IntentionAction {
         var nonPrimitiveMocked = false
         val allParameters = constructorParameters.get(psiElement)
         val parametersWithoutMocks = allParameters.filter { parameter -> existingMocks.filter(parameter, clazz) }
+        val aliasedUseStatementList = aliasedUseStatements.find(psiElement)
 
         removeWhitespaceBeforeConstruct.invoke(constructStatement)
 
         for (parameter in parametersWithoutMocks) {
-            nonPrimitiveMocked = addMissingUseStatements.invoke(namespace, parameter.type.toString()) || nonPrimitiveMocked
+            val parameterClassName = parameter.type.toString()
+            nonPrimitiveMocked = addMissingUseStatements.invoke(namespace, parameterClassName, aliasedUseStatementList.get(parameterClassName)) || nonPrimitiveMocked
             addMockAssignment.invoke(project, constructStatement, parameter)
 
             currentAnchor = addProperty.invoke(project, parameter, currentAnchor, clazz, settings.addDocBlockForMembers)
         }
 
         if (settings.addDocBlockForMembers && nonPrimitiveMocked) {
-            addMissingUseStatements.invoke(namespace, "\\Prophecy\\Prophecy\\ObjectProphecy")
+            addMissingUseStatements.invoke(namespace, "\\Prophecy\\Prophecy\\ObjectProphecy", null)
         }
 
         addNewlineBefore.invoke(constructStatement, project)

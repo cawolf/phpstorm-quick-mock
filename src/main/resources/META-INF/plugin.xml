@@ -49,6 +49,7 @@
         <projectService serviceImplementation="de.cawolf.quickmock.intention.service.AddMockAssignment" />
         <projectService serviceImplementation="de.cawolf.quickmock.intention.service.AddNewlineBefore" />
         <projectService serviceImplementation="de.cawolf.quickmock.intention.service.AddProperty" />
+        <projectService serviceImplementation="de.cawolf.quickmock.intention.service.AliasedUseStatements" />
         <projectService serviceImplementation="de.cawolf.quickmock.intention.service.ConstructorParameters" />
         <projectService serviceImplementation="de.cawolf.quickmock.intention.service.ExistingMocks" />
         <projectService serviceImplementation="de.cawolf.quickmock.intention.service.ReformatTestcase" />
