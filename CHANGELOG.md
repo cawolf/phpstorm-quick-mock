@@ -1,3 +1,6 @@
+# v1.3.0
+* aliased imports are now prophesized correctly
+
 # v1.2.1
 * updated meta information to keep plugin enabled in newer PHPStorm versions
 

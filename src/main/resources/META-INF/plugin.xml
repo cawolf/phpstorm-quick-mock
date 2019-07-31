@@ -9,6 +9,8 @@
 
     <change-notes><![CDATA[
         <dl>
+            <dt>v1.3.0</dt>
+            <dd>aliased imports are now prophesized correctly</dd>
             <dt>1.2.1</dt>
             <dd>updated meta information</dd>
             <dt>1.2.0</dt>
