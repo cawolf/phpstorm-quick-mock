@@ -1,5 +1,8 @@
+# v1.3.1
+* colliding inherited properties are now handled (#26)
+
 # v1.3.0
-* aliased imports are now prophesized correctly
+* aliased imports are now prophesized correctly (#22)
 
 # v1.2.1
 * updated meta information to keep plugin enabled in newer PHPStorm versions
