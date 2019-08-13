@@ -64,12 +64,16 @@ class QuickMockCreator : PsiElementBaseIntentionAction(), IntentionAction {
 
         removeWhitespaceBeforeConstruct.invoke(constructStatement)
 
+        val parameterMapByName = ArrayList<Pair<String, Parameter>>(parametersWithoutMocks.size)
         for (parameter in parametersWithoutMocks) {
             val parameterClassName = parameter.type.toString()
-            nonPrimitiveMocked = addMissingUseStatements.invoke(namespace, parameterClassName, aliasedUseStatementList.get(parameterClassName)) || nonPrimitiveMocked
-            addMockAssignment.invoke(project, constructStatement, parameter)
+            val parameterName = determineParameterName(clazz, parameter)
+            nonPrimitiveMocked = addMissingUseStatements.invoke(namespace, parameterClassName, aliasedUseStatementList[parameterClassName]) || nonPrimitiveMocked
+            addMockAssignment.invoke(project, constructStatement, parameter, parameterName)
 
-            currentAnchor = addProperty.invoke(project, parameter, currentAnchor, clazz, settings.addDocBlockForMembers)
+            currentAnchor = addProperty.invoke(project, parameter, parameterName, currentAnchor, clazz, settings.addDocBlockForMembers)
+
+            parameterMapByName.add(Pair(parameterName, parameter))
         }
 
         if (settings.addDocBlockForMembers && nonPrimitiveMocked) {
@@ -78,7 +82,11 @@ class QuickMockCreator : PsiElementBaseIntentionAction(), IntentionAction {
 
         addNewlineBefore.invoke(constructStatement, project)
         removeSurroundingWhitespaces.invoke(parameterList)
-        addArguments.invoke(parameterList, allParameters, project)
+        addArguments.invoke(parameterList, parameterMapByName, project)
         reformatTestcase.invoke(project, currentAnchor, clazz)
+    }
+
+    private fun determineParameterName(clazz: PhpClass, parameter: Parameter): String {
+        return if (clazz.findOwnFieldByName(parameter.name, false) == null && clazz.findFieldByName(parameter.name, false) != null) parameter.name + GENERATED_SUFFIX else parameter.name
     }
 }

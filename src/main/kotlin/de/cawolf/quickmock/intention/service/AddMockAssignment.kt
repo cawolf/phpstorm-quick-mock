@@ -7,11 +7,11 @@ import com.jetbrains.php.lang.psi.PhpPsiElementFactory
 import com.jetbrains.php.lang.psi.elements.Parameter
 
 class AddMockAssignment {
-    fun invoke(project: Project, constructStatement: PsiElement, parameter: Parameter) {
-        val whitespaceType = IElementType.enumerate { it -> it.toString() == "WHITE_SPACE" }.first()
+    fun invoke(project: Project, constructStatement: PsiElement, parameter: Parameter, parameterName: String) {
+        val whitespaceType = IElementType.enumerate { it.toString() == "WHITE_SPACE" }.first()
         val mockAssignment = PhpPsiElementFactory.createStatement(
                 project,
-                "\$this->${parameter.name} = ${mockValueFromType(parameter)};"
+                "\$this->$parameterName = ${mockValueFromType(parameter)};"
         )
 
         val currentMethod = constructStatement.parent
