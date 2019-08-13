@@ -11,9 +11,9 @@ import com.jetbrains.php.lang.psi.visitors.PhpElementVisitor
 import de.cawolf.quickmock.intention.PRIMITIVES
 
 class AddArguments {
-    fun invoke(parameterList: PsiElement, parameter: MutableList<Parameter>, project: Project) {
-        val parameterListType = IElementType.enumerate { it -> it.toString() == "Parameter list" }.first()
-        val joinedParameterValues = parameter.joinToString { it -> "\$this->${it.name}${addReveal(it)}" }
+    fun invoke(parameterList: PsiElement, parameter: List<Pair<String, Parameter>>, project: Project) {
+        val parameterListType = IElementType.enumerate { it.toString() == "Parameter list" }.first()
+        val joinedParameterValues = parameter.joinToString { "\$this->${it.first}${addReveal(it.second)}" }
         val newParameterList = createFirstFromText(project, parameterListType, "f($joinedParameterValues);")
         parameterList.replace(newParameterList)
     }

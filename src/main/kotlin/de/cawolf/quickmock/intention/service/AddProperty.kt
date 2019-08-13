@@ -9,11 +9,11 @@ import com.jetbrains.php.lang.psi.elements.PhpClass
 import de.cawolf.quickmock.intention.PRIMITIVES
 
 class AddProperty {
-    fun invoke(project: Project, parameter: Parameter, currentAnchor: PsiElement, clazz: PhpClass, addDocBlockForMembers: Boolean): PsiElement {
-        val classFieldsType = IElementType.enumerate { it -> it.toString() == "Class fields" }.first()
-        val docCommentType = IElementType.enumerate { it -> it.toString() == "PhpDocComment" }.first()
+    fun invoke(project: Project, parameter: Parameter, parameterName: String, currentAnchor: PsiElement, clazz: PhpClass, addDocBlockForMembers: Boolean): PsiElement {
+        val classFieldsType = IElementType.enumerate { it.toString() == "Class fields" }.first()
+        val docCommentType = IElementType.enumerate { it.toString() == "PhpDocComment" }.first()
 
-        val field = PhpPsiElementFactory.createFromText(project, classFieldsType, "class C { private \$${parameter.name}; }")
+        val field = PhpPsiElementFactory.createFromText(project, classFieldsType, "class C { private \$$parameterName; }")
         val fieldAnchor = clazz.addAfter(field, currentAnchor)
 
         if (addDocBlockForMembers) {
