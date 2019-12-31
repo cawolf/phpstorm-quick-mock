@@ -8,12 +8,12 @@ use Psr\Log\LoggerInterface;
 
 class SubjectTest
 {
+    /** @var string */
+    private $s;
     /** @var LoggerInterface|ObjectProphecy */
     private $logger;
     /** @var int */
     private $i;
-    /** @var string */
-    private $s;
     /** @var SubjectUnderTest */
     private $subject;
 
