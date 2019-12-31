@@ -5,7 +5,7 @@ import com.intellij.testFramework.fixtures.impl.CodeInsightTestFixtureImpl
 import com.jetbrains.php.config.PhpLanguageLevel
 import com.jetbrains.php.config.PhpProjectConfigurationFacade
 import de.cawolf.quickmock.Settings
-import junit.framework.Assert
+import org.junit.Assert
 
 abstract class BaseTest: LightPlatformCodeInsightFixtureTestCase() {
     override fun getTestDataPath(): String {
