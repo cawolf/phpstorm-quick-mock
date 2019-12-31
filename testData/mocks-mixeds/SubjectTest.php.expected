@@ -6,7 +6,7 @@ use App\SubjectUnderTest;
 
 class SubjectTest
 {
-    /** @var $data */
+    /** @var mixed */
     private $data;
     /** @var SubjectUnderTest */
     private $subject;
