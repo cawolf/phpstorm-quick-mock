@@ -70,7 +70,7 @@ class QuickMockCreator : PsiElementBaseIntentionAction(), IntentionAction {
             if (parametersWithoutMocks.contains(parameter)) {
                 val parameterClassName = parameter.type.toString()
                 parameterName = determineParameterName(clazz, parameter)
-                nonPrimitiveMocked = addMissingUseStatements.invoke(namespace, parameterClassName, aliasedUseStatementList[parameterClassName]) || nonPrimitiveMocked
+                nonPrimitiveMocked = addMissingUseStatements.invoke(project, namespace, parameterClassName, aliasedUseStatementList[parameterClassName]) || nonPrimitiveMocked
                 addMockAssignment.invoke(project, constructStatement, parameter, parameterName)
 
                 currentAnchor = addProperty.invoke(project, parameter, parameterName, currentAnchor, clazz, settings.addDocBlockForMembers)
@@ -80,7 +80,7 @@ class QuickMockCreator : PsiElementBaseIntentionAction(), IntentionAction {
         }
 
         if (settings.addDocBlockForMembers && nonPrimitiveMocked) {
-            addMissingUseStatements.invoke(namespace, "\\Prophecy\\Prophecy\\ObjectProphecy", null)
+            addMissingUseStatements.invoke(project, namespace, "\\Prophecy\\Prophecy\\ObjectProphecy", null)
         }
 
         addNewlineBefore.invoke(constructStatement, project)

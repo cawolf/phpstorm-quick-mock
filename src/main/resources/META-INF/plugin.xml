@@ -56,6 +56,7 @@
         <projectService serviceImplementation="de.cawolf.quickmock.intention.service.AliasedUseStatements" />
         <projectService serviceImplementation="de.cawolf.quickmock.intention.service.ConstructorParameters" />
         <projectService serviceImplementation="de.cawolf.quickmock.intention.service.ExistingMocks" />
+        <projectService serviceImplementation="de.cawolf.quickmock.intention.service.FoldDocBlockTypeHintedArray" />
         <projectService serviceImplementation="de.cawolf.quickmock.intention.service.ReformatTestcase" />
         <projectService serviceImplementation="de.cawolf.quickmock.intention.service.RemoveSurroundingWhitespaces" />
         <projectService serviceImplementation="de.cawolf.quickmock.intention.service.RemoveWhitespaceBeforeConstruct" />
