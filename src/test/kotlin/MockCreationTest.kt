@@ -57,4 +57,8 @@ class MockCreationTest: BaseTest() {
         executeIntention()
         assertResultMatches("mocks-existing-properties-with-suffix/SubjectTest.php.expected")
     }
+
+    fun testMocksDocBlockTypeHintedArrays() {
+        assertQuickMockCreationWorksWith("mocks-doc-block-type-hinted-arrays")
+    }
 }
