@@ -36,8 +36,15 @@ intellij {
     type 'IU'
     version ideaVersion
     updateSinceUntilBuild false
-    plugins [
-        "com.jetbrains.php:${phpPluginVersion}"
+    plugins = [
+        "com.jetbrains.php:${phpPluginVersion}",
+        'coverage',
+        'webDeployment',
+        'yaml',
+        'CSS',
+        'java-i18n',
+        'properties',
+        'xpath'
     ]
 
     pluginName 'Quick Mock'
