@@ -9,7 +9,7 @@ import com.jetbrains.php.lang.psi.elements.PhpClass
 
 class ReformatTestcase {
     fun invoke(project: Project, psiElement: PsiElement, clazz: PhpClass) {
-        val pdm = ServiceManager.getService(project, PsiDocumentManager::class.java)
+        val pdm = project.getComponent(PsiDocumentManager::class.java)
         val document = pdm.getDocument(psiElement.containingFile)
         pdm.doPostponedOperationsAndUnblockDocument(document!!)
 
