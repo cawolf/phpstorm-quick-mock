@@ -1,0 +1,21 @@
+<?php
+
+namespace App\Tests;
+
+use App\SubjectUnderTest;
+use Psr\Log\LoggerInterface;
+
+class SubjectTest
+{
+    private $logger;
+    /** @var SubjectUnderTest */
+    private $subject;
+
+    public function setUp()
+    {
+        parent::setUp();
+        $this->logger = $this->prophesize(LoggerInterface::class);
+
+        $this->subject = new SubjectUnderTest($this->logger->reveal());
+    }
+}
