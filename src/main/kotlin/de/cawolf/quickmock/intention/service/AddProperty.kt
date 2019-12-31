@@ -20,11 +20,23 @@ class AddProperty {
         if (addDocBlockForMembers) {
             val foldDocBlockTypeHintedArray = ServiceManager.getService(project, FoldDocBlockTypeHintedArray::class.java)
 
-            val objectProphecy = if (PRIMITIVES.contains(foldDocBlockTypeHintedArray.invoke(parameter.type.toString()))) "" else "|ObjectProphecy"
-            val docBlock = PhpPsiElementFactory.createFromText(project, docCommentType, "/** @var ${parameter.node.firstChildNode.text}$objectProphecy */\n\$foo = null;")
+            val foldedType = foldDocBlockTypeHintedArray.invoke(parameter.type.toString())
+            val objectProphecy = if (PRIMITIVES.contains(foldedType)) "" else "|ObjectProphecy"
+            val docBlock = PhpPsiElementFactory.createFromText(project, docCommentType, "/** @var ${determineTypeHint(parameter, foldedType)}$objectProphecy */\n\$foo = null;")
             clazz.addBefore(docBlock, fieldAnchor)
         }
 
         return fieldAnchor
+    }
+
+    private fun determineTypeHint(parameter: Parameter, foldedType: String): String {
+        return when {
+            foldedType == "" -> "mixed"
+            foldedType.contains('\\') -> when {
+                foldedType.split('\\').last() != parameter.node.firstChildNode.text -> parameter.node.firstChildNode.text
+                else -> foldedType.split('\\').last()
+            }
+            else -> foldedType
+        }
     }
 }
