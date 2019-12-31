@@ -65,13 +65,16 @@ class QuickMockCreator : PsiElementBaseIntentionAction(), IntentionAction {
         removeWhitespaceBeforeConstruct.invoke(constructStatement)
 
         val parameterMapByName = ArrayList<Pair<String, Parameter>>(parametersWithoutMocks.size)
-        for (parameter in parametersWithoutMocks) {
-            val parameterClassName = parameter.type.toString()
-            val parameterName = determineParameterName(clazz, parameter)
-            nonPrimitiveMocked = addMissingUseStatements.invoke(namespace, parameterClassName, aliasedUseStatementList[parameterClassName]) || nonPrimitiveMocked
-            addMockAssignment.invoke(project, constructStatement, parameter, parameterName)
+        for (parameter in allParameters) {
+            var parameterName = parameter.name
+            if (parametersWithoutMocks.contains(parameter)) {
+                val parameterClassName = parameter.type.toString()
+                parameterName = determineParameterName(clazz, parameter)
+                nonPrimitiveMocked = addMissingUseStatements.invoke(namespace, parameterClassName, aliasedUseStatementList[parameterClassName]) || nonPrimitiveMocked
+                addMockAssignment.invoke(project, constructStatement, parameter, parameterName)
 
-            currentAnchor = addProperty.invoke(project, parameter, parameterName, currentAnchor, clazz, settings.addDocBlockForMembers)
+                currentAnchor = addProperty.invoke(project, parameter, parameterName, currentAnchor, clazz, settings.addDocBlockForMembers)
+            }
 
             parameterMapByName.add(Pair(parameterName, parameter))
         }

@@ -40,6 +40,10 @@ class MockCreationTest: BaseTest() {
         assertQuickMockCreationWorksWith("mocks-multiple-parameters")
     }
 
+    fun testDontRegenerateExistingMocks() {
+        assertQuickMockCreationWorksWith("dont-regenerate-existing-mocks")
+    }
+
     fun testMocksAliases() {
         assertQuickMockCreationWorksWith("mocks-aliases")
     }
