@@ -1,3 +1,8 @@
+# v1.3.2
+* fix mock generation for union types (#30)
+* fix regression: existing mocks are not regenerated anymore (#29)
+* fix type hints for `mixed` properties (#28)
+
 # v1.3.1
 * colliding inherited properties are now handled (#26)
 
