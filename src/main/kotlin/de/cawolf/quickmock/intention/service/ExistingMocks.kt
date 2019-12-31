@@ -9,7 +9,7 @@ class ExistingMocks {
     fun filter(parameter: Parameter, clazz: PhpClass): Boolean {
         val existingField = clazz.findOwnFieldByName(parameter.name, false)
         val existingSuffixedField = clazz.findOwnFieldByName(parameter.name + GENERATED_SUFFIX, false)
-        return notMocked(existingField) || notMocked(existingSuffixedField)
+        return notMocked(existingField) && notMocked(existingSuffixedField)
     }
 
     private fun notMocked(existingField: Field?): Boolean {
