@@ -1,5 +1,6 @@
 package de.cawolf.quickmock.intention.service
 
+import com.intellij.openapi.components.ServiceManager
 import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiElement
 import com.intellij.psi.tree.IElementType
@@ -17,7 +18,9 @@ class AddProperty {
         val fieldAnchor = clazz.addAfter(field, currentAnchor)
 
         if (addDocBlockForMembers) {
-            val objectProphecy = if (PRIMITIVES.contains(parameter.type.toString())) "" else "|ObjectProphecy"
+            val foldDocBlockTypeHintedArray = ServiceManager.getService(project, FoldDocBlockTypeHintedArray::class.java)
+
+            val objectProphecy = if (PRIMITIVES.contains(foldDocBlockTypeHintedArray.invoke(parameter.type.toString()))) "" else "|ObjectProphecy"
             val docBlock = PhpPsiElementFactory.createFromText(project, docCommentType, "/** @var ${parameter.node.firstChildNode.text}$objectProphecy */\n\$foo = null;")
             clazz.addBefore(docBlock, fieldAnchor)
         }

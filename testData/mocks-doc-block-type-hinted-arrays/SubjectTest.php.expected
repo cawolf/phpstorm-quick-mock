@@ -1,0 +1,33 @@
+<?php
+
+namespace App\Tests;
+
+use App\Gitlab\Model\GitlabMapping;
+use Http\Client\HttpClient;
+use JMS\Serializer\SerializerInterface;
+use Prophecy\Prophecy\ObjectProphecy;
+use SubjectUnderTest;
+
+class SubjectTest
+{
+    /** @var HttpClient|ObjectProphecy */
+    private $gitlabClient;
+    /** @var SerializerInterface|ObjectProphecy */
+    private $serializer;
+    /** @var GitlabMapping|ObjectProphecy */
+    private $mapper;
+    /** @var array */
+    private $jiraConfig;
+    /** @var SubjectUnderTest */
+    private $subject;
+
+    protected function setUp(): void
+    {
+        $this->gitlabClient = $this->prophesize(HttpClient::class);
+        $this->serializer = $this->prophesize(SerializerInterface::class);
+        $this->mapper = $this->prophesize(GitlabMapping::class);
+        $this->jiraConfig = [];
+
+        $this->subject = new SubjectUnderTest($this->gitlabClient->reveal(), $this->serializer->reveal(), $this->mapper->reveal(), $this->jiraConfig);
+    }
+}

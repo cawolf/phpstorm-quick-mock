@@ -1,5 +1,6 @@
 package de.cawolf.quickmock.intention.service
 
+import com.intellij.openapi.components.ServiceManager
 import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFile
@@ -13,13 +14,15 @@ import de.cawolf.quickmock.intention.PRIMITIVES
 class AddArguments {
     fun invoke(parameterList: PsiElement, parameter: List<Pair<String, Parameter>>, project: Project) {
         val parameterListType = IElementType.enumerate { it.toString() == "Parameter list" }.first()
-        val joinedParameterValues = parameter.joinToString { "\$this->${it.first}${addReveal(it.second)}" }
+        val joinedParameterValues = parameter.joinToString { "\$this->${it.first}${addReveal(it.second, project)}" }
         val newParameterList = createFirstFromText(project, parameterListType, "f($joinedParameterValues);")
         parameterList.replace(newParameterList)
     }
 
-    private fun addReveal(it: Parameter) =
-            if (PRIMITIVES.contains(it.type.toString())) "" else "->reveal()"
+    private fun addReveal(it: Parameter, project: Project): String {
+        val foldDocBlockTypeHintedArray = ServiceManager.getService(project, FoldDocBlockTypeHintedArray::class.java)
+        return if (PRIMITIVES.contains(foldDocBlockTypeHintedArray.invoke(it.type.toString()))) "" else "->reveal()"
+    }
 
     private fun createFirstFromText(p: Project, elementType: IElementType, text: String): PsiElement {
         var ret = arrayOf<PsiElement>()
