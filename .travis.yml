@@ -14,4 +14,4 @@ cache:
     - $HOME/.gradle/wrapper/
 
 script:
-- "./gradlew check buildPlugin"
+- "./gradlew :cleanTest :test check verifyPlugin"
