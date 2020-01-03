@@ -1,7 +1,7 @@
 # Quick Mock
 [![Build Status](https://travis-ci.com/cawolf/phpstorm-quick-mock.svg?branch=master)](https://travis-ci.com/cawolf/phpstorm-quick-mock)
-[![Version](https://badges.cawolf.de/quick-mock/version)](https://plugins.jetbrains.com/plugin/11165-quick-mock)
-[![Downloads](https://badges.cawolf.de/quick-mock/downloads)](https://plugins.jetbrains.com/plugin/11165-quick-mock)
+[![Version](https://img.shields.io/jetbrains/plugin/v/11165?label=version)](https://plugins.jetbrains.com/plugin/11165-quick-mock)
+[![Downloads](https://img.shields.io/jetbrains/plugin/d/11165)](https://plugins.jetbrains.com/plugin/11165-quick-mock)
 
 PHPStorm plugin allowing you to quickly create mock objects from within a test class
 
