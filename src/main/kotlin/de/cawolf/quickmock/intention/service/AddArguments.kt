@@ -27,8 +27,8 @@ class AddArguments {
     private fun createFirstFromText(p: Project, elementType: IElementType, text: String): PsiElement {
         var ret = arrayOf<PsiElement>()
         createDummyFile(p, text).accept(object : PhpElementVisitor() {
-            override fun visitElement(element: PsiElement?) {
-                val node = element!!.node
+            override fun visitElement(element: PsiElement) {
+                val node = element.node
                 if (node != null && node.elementType === elementType) {
                     ret += element
                 }

@@ -1,13 +1,13 @@
 import com.intellij.openapi.components.ServiceManager
 import com.intellij.testFramework.UsefulTestCase
-import com.intellij.testFramework.fixtures.LightPlatformCodeInsightFixtureTestCase
+import com.intellij.testFramework.fixtures.BasePlatformTestCase
 import com.intellij.testFramework.fixtures.impl.CodeInsightTestFixtureImpl
 import com.jetbrains.php.config.PhpLanguageLevel
 import com.jetbrains.php.config.PhpProjectConfigurationFacade
 import de.cawolf.quickmock.Settings
 import org.junit.Assert
 
-abstract class BaseTest: LightPlatformCodeInsightFixtureTestCase() {
+abstract class BaseTest: BasePlatformTestCase() {
     override fun getTestDataPath(): String {
         return "testData"
     }
@@ -45,7 +45,7 @@ abstract class BaseTest: LightPlatformCodeInsightFixtureTestCase() {
 
     protected fun executeIntention() {
         val action = myFixture.findSingleIntention("Quick Mock: add constructor prophecies")
-        CodeInsightTestFixtureImpl.invokeIntention(action, myFixture.file, myFixture.editor, action.text)
+        CodeInsightTestFixtureImpl.invokeIntention(action, myFixture.file, myFixture.editor)
     }
 
     protected fun assertResultMatches(expectedResultFile: String) {

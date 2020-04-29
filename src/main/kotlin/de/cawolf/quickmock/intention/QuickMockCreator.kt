@@ -68,7 +68,7 @@ class QuickMockCreator : PsiElementBaseIntentionAction(), IntentionAction {
         for (parameter in allParameters) {
             var parameterName = parameter.name
             if (parametersWithoutMocks.contains(parameter)) {
-                val parameterClassName = parameter.type.toString()
+                val parameterClassName = parameter.type.toString().removeSuffix("[]")
                 parameterName = determineParameterName(clazz, parameter)
                 nonPrimitiveMocked = addMissingUseStatements.invoke(project, namespace, parameterClassName, aliasedUseStatementList[parameterClassName]) || nonPrimitiveMocked
                 addMockAssignment.invoke(project, constructStatement, parameter, parameterName)
