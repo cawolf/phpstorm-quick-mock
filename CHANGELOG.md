@@ -1,3 +1,6 @@
+# v1.3.3
+* resolve constructor properly if the class itself does now own a constructor (#35)
+
 # v1.3.2
 * fix mock generation for union types (#30)
 * fix regression: existing mocks are not regenerated anymore (#29)
