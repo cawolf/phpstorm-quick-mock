@@ -1,0 +1,21 @@
+<?php
+
+namespace App\Tests;
+
+use App\SubjectUnderTest;
+
+class SubjectTest
+{
+    /** @var string */
+    private $someString;
+    /** @var SubjectUnderTest */
+    private $subject;
+
+    public function setUp()
+    {
+        parent::setUp();
+        $this->someString = '';
+
+        $this->subject = new SubjectUnderTest($this->someString);
+    }
+}

@@ -61,4 +61,14 @@ class MockCreationTest: BaseTest() {
     fun testMocksDocBlockTypeHintedArrays() {
         assertQuickMockCreationWorksWith("mocks-doc-block-type-hinted-arrays")
     }
+
+    fun testMocksConstructorsInAbstractClasses() {
+        setupScenario(
+                "mocks-constructor-in-abstract-class/SubjectTest.php",
+                listOf("mocks-constructor-in-abstract-class/SubjectUnderTest.php", "mocks-constructor-in-abstract-class/AbstractClass.php")
+        )
+        assertIntentionIsAvailable()
+        executeIntention()
+        assertResultMatches("mocks-constructor-in-abstract-class/SubjectTest.php.expected")
+    }
 }
