@@ -20,11 +20,12 @@ class QuickMockCreator : PsiElementBaseIntentionAction(), IntentionAction {
     override fun getFamilyName(): String = text
 
     override fun isAvailable(project: Project, editor: Editor, psiElement: PsiElement): Boolean {
+        val constructor = ServiceManager.getService(project, Constructor::class.java)
         val constructorParameters = ServiceManager.getService(project, ConstructorParameters::class.java)
         val newExpression = PsiTreeUtil.getParentOfType(psiElement, NewExpression::class.java)
         return newExpression is NewExpression
-                && newExpression.classReference?.resolve() is Method
-                && constructorParameters.get(psiElement).count() != newExpression.parameterList!!.children.count()
+                && newExpression.let { constructor.get(it) } != null
+                && constructorParameters.get(psiElement, project).count() != newExpression.parameterList!!.children.count()
     }
 
     @Throws(IncorrectOperationException::class)
@@ -38,7 +39,9 @@ class QuickMockCreator : PsiElementBaseIntentionAction(), IntentionAction {
                 ?: return
         val constructStatement = PsiTreeUtil.getParentOfType(psiElement, AssignmentExpression::class.java)
                 ?: return
-        val parameterList = PsiTreeUtil.getParentOfType(psiElement, NewExpression::class.java)?.parameterList
+        val newExpression = PsiTreeUtil.getParentOfType(psiElement, NewExpression::class.java)
+                ?: return
+        val parameterList = newExpression.parameterList
                 ?: return
 
         // get helper services
@@ -58,7 +61,7 @@ class QuickMockCreator : PsiElementBaseIntentionAction(), IntentionAction {
         // actually create mocks
         var currentAnchor = beginningOfClass
         var nonPrimitiveMocked = false
-        val allParameters = constructorParameters.get(psiElement)
+        val allParameters = constructorParameters.get(psiElement, project)
         val parametersWithoutMocks = allParameters.filter { parameter -> existingMocks.filter(parameter, clazz) }
         val aliasedUseStatementList = aliasedUseStatements.find(psiElement)
 
