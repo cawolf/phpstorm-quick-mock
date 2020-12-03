@@ -2,6 +2,7 @@ name: Add release asset
 
 on:
   release:
+    types: [published]
 
 jobs:
   add-release-asset:
@@ -37,5 +38,5 @@ jobs:
         with:
           upload_url: ${{ steps.fetch_release.outputs.upload_url }}
           asset_path: build/distributions/${{ steps.vars.outputs.asset_name }}
-          asset_name: TEST-${{ steps.vars.outputs.asset_name }}
+          asset_name: ${{ steps.vars.outputs.asset_name }}
           asset_content_type: application/zip
