@@ -41,7 +41,7 @@
         </dl
     ]]></change-notes>
 
-    <idea-version since-build="201.6668" />
+    <idea-version since-build="202.8194" />
 
     <extensions defaultExtensionNs="com.intellij">
         <intentionAction>

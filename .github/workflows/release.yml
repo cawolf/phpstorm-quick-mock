@@ -1,0 +1,41 @@
+name: Add release asset
+
+on:
+  release:
+
+jobs:
+  add-release-asset:
+    runs-on: ubuntu-18.04
+
+    steps:
+      - name: check out sources
+        uses: actions/checkout@v2
+      - name: install fonts
+        run: sudo apt-get update -y && sudo apt-get install -y fonts-dejavu fontconfig
+      - name: setup java
+        uses: actions/setup-java@v1
+        with:
+          java-version: '8'
+      - name: build asset
+        uses: eskatos/gradle-command-action@v1.3.3
+        with:
+          arguments: build
+      - name: fetch latest release
+        id: fetch_release
+        uses: thebritican/fetch-latest-release@v2.0.0
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+      - name: calculate asset name
+        id: vars
+        run: |
+          TAG_NAME=${{ steps.fetch_release.outputs.tag_name }}
+          echo ::set-output name=asset_name::Quick Mock-${TAG_NAME:1}.zip
+      - name: upload release asset
+        uses: actions/upload-release-asset@v1.0.2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.fetch_release.outputs.upload_url }}
+          asset_path: build/distributions/${{ steps.vars.outputs.asset_name }}
+          asset_name: TEST-${{ steps.vars.outputs.asset_name }}
+          asset_content_type: application/zip
