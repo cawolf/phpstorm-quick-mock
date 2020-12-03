@@ -1,3 +1,6 @@
+# v1.3.4
+* fix deprecations and replace travis with github workflows (#38)
+
 # v1.3.3
 * resolve constructor properly if the class itself does now own a constructor (#35)
 
