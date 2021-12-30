@@ -13,10 +13,10 @@ jobs:
       - name: install fonts
         run: sudo apt-get update -y && sudo apt-get install -y fonts-dejavu fontconfig
       - name: setup java
-        uses: actions/setup-java@v1
+        uses: actions/setup-java@v2
         with:
-          java-version: '8'
+          java-version: '11'
       - name: test plugin
-        uses: eskatos/gradle-command-action@v2.0.1
+        uses: gradle/gradle-build-action@v2
         with:
           arguments: :cleanTest :test check verifyPlugin
