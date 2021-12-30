@@ -1,3 +1,6 @@
+# v1.3.5
+* fix: Intellij gradle plugin update (#66)
+
 # v1.3.4
 * fix deprecations and replace travis with github workflows (#38)
 
