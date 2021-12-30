@@ -25,24 +25,28 @@ class QuickMockCreator : PsiElementBaseIntentionAction(), IntentionAction {
         val newExpression = PsiTreeUtil.getParentOfType(psiElement, NewExpression::class.java)
         return newExpression is NewExpression
                 && newExpression.let { constructor.get(it) } != null
-                && constructorParameters.get(psiElement, project).count() != newExpression.parameterList!!.children.count()
+                && constructorParameters.get(psiElement, project)
+            .count() != newExpression.parameterList!!.children.count()
     }
 
     @Throws(IncorrectOperationException::class)
     override fun invoke(project: Project, editor: Editor, psiElement: PsiElement) {
         // init and safeguards: do not proceed if the current edited test class is not parsing correctly
         val namespace = PsiTreeUtil.getParentOfType(psiElement, PhpNamespace::class.java)
-                ?: return
+            ?: return
         val clazz = PsiTreeUtil.getParentOfType(psiElement, PhpClass::class.java)
-                ?: return
-        val beginningOfClass = PsiTreeUtil.getParentOfType(psiElement, PhpClass::class.java)?.children?.find { it -> it is ImplementsList }?.nextSibling?.nextSibling
-                ?: return
+            ?: return
+        val beginningOfClass = PsiTreeUtil.getParentOfType(
+            psiElement,
+            PhpClass::class.java
+        )?.children?.find { it -> it is ImplementsList }?.nextSibling?.nextSibling
+            ?: return
         val constructStatement = PsiTreeUtil.getParentOfType(psiElement, AssignmentExpression::class.java)
-                ?: return
+            ?: return
         val newExpression = PsiTreeUtil.getParentOfType(psiElement, NewExpression::class.java)
-                ?: return
+            ?: return
         val parameterList = newExpression.parameterList
-                ?: return
+            ?: return
 
         // get helper services
         val addArguments = ServiceManager.getService(project, AddArguments::class.java)
@@ -54,7 +58,8 @@ class QuickMockCreator : PsiElementBaseIntentionAction(), IntentionAction {
         val removeSurroundingWhitespaces = ServiceManager.getService(project, RemoveSurroundingWhitespaces::class.java)
         val constructorParameters = ServiceManager.getService(project, ConstructorParameters::class.java)
         val addNewlineBefore = ServiceManager.getService(project, AddNewlineBefore::class.java)
-        val removeWhitespaceBeforeConstruct = ServiceManager.getService(project, RemoveWhitespaceBeforeConstruct::class.java)
+        val removeWhitespaceBeforeConstruct =
+            ServiceManager.getService(project, RemoveWhitespaceBeforeConstruct::class.java)
         val existingMocks = ServiceManager.getService(project, ExistingMocks::class.java)
         val settings = ServiceManager.getService(Settings::class.java)
 
@@ -73,10 +78,22 @@ class QuickMockCreator : PsiElementBaseIntentionAction(), IntentionAction {
             if (parametersWithoutMocks.contains(parameter)) {
                 val parameterClassName = parameter.type.toString().removeSuffix("[]")
                 parameterName = determineParameterName(clazz, parameter)
-                nonPrimitiveMocked = addMissingUseStatements.invoke(project, namespace, parameterClassName, aliasedUseStatementList[parameterClassName]) || nonPrimitiveMocked
+                nonPrimitiveMocked = addMissingUseStatements.invoke(
+                    project,
+                    namespace,
+                    parameterClassName,
+                    aliasedUseStatementList[parameterClassName]
+                ) || nonPrimitiveMocked
                 addMockAssignment.invoke(project, constructStatement, parameter, parameterName)
 
-                currentAnchor = addProperty.invoke(project, parameter, parameterName, currentAnchor, clazz, settings.addDocBlockForMembers)
+                currentAnchor = addProperty.invoke(
+                    project,
+                    parameter,
+                    parameterName,
+                    currentAnchor,
+                    clazz,
+                    settings.addDocBlockForMembers
+                )
             }
 
             parameterMapByName.add(Pair(parameterName, parameter))
@@ -93,6 +110,10 @@ class QuickMockCreator : PsiElementBaseIntentionAction(), IntentionAction {
     }
 
     private fun determineParameterName(clazz: PhpClass, parameter: Parameter): String {
-        return if (clazz.findOwnFieldByName(parameter.name, false) == null && clazz.findFieldByName(parameter.name, false) != null) parameter.name + GENERATED_SUFFIX else parameter.name
+        return if (clazz.findOwnFieldByName(parameter.name, false) == null && clazz.findFieldByName(
+                parameter.name,
+                false
+            ) != null
+        ) parameter.name + GENERATED_SUFFIX else parameter.name
     }
 }

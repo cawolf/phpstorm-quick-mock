@@ -6,11 +6,11 @@ const val GENERATED_SUFFIX = "QuickMocked"
 
 @JvmField
 val PRIMITIVES = arrayOf(
-        "string",
-        "int",
-        "float",
-        "bool",
-        "array",
-        "", // mixed
-        "object"
+    "string",
+    "int",
+    "float",
+    "bool",
+    "array",
+    "", // mixed
+    "object"
 )

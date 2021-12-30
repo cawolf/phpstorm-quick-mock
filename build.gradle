@@ -3,7 +3,7 @@ import org.gradle.api.tasks.testing.logging.TestLogEvent
 
 plugins {
     id 'java'
-    id 'org.jetbrains.intellij' version '0.7.3'
+    id 'org.jetbrains.intellij' version '1.3.0'
     id 'org.jetbrains.gradle.plugin.idea-ext' version '1.1.1'
     id 'org.jetbrains.kotlin.jvm' version '1.6.10'
 }
@@ -72,10 +72,10 @@ tasks.withType(Test) {
 }
 
 intellij {
-    type 'IU'
-    version ideaVersion
-    updateSinceUntilBuild false
-    plugins = [
+    type.set('IU')
+    version.set(ideaVersion)
+    updateSinceUntilBuild.set(false)
+    plugins.set([
         "com.jetbrains.php:${phpPluginVersion}",
         'coverage',
         'webDeployment',
@@ -84,7 +84,7 @@ intellij {
         'java-i18n',
         'properties',
         'xpath'
-    ]
+    ])
 
-    pluginName 'Quick Mock'
+    pluginName.set('Quick Mock')
 }

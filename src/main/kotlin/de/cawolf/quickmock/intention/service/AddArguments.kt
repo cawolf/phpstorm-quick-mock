@@ -40,6 +40,12 @@ class AddArguments {
     }
 
     private fun createDummyFile(p: Project, fileText: String): PsiFile =
-            PsiFileFactory.getInstance(p).createFileFromText("DUMMY__.${PhpFileType.INSTANCE.defaultExtension}", PhpFileType.INSTANCE, "<?php\n$fileText", System.currentTimeMillis(), false)
+        PsiFileFactory.getInstance(p).createFileFromText(
+            "DUMMY__.${PhpFileType.INSTANCE.defaultExtension}",
+            PhpFileType.INSTANCE,
+            "<?php\n$fileText",
+            System.currentTimeMillis(),
+            false
+        )
 
 }

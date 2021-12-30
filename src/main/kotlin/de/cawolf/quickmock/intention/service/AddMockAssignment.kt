@@ -11,8 +11,8 @@ class AddMockAssignment {
     fun invoke(project: Project, constructStatement: PsiElement, parameter: Parameter, parameterName: String) {
         val whitespaceType = IElementType.enumerate { it.toString() == "WHITE_SPACE" }.first()
         val mockAssignment = PhpPsiElementFactory.createStatement(
-                project,
-                "\$this->$parameterName = ${mockValueFromType(parameter, project)};"
+            project,
+            "\$this->$parameterName = ${mockValueFromType(parameter, project)};"
         )
 
         val currentMethod = constructStatement.parent
