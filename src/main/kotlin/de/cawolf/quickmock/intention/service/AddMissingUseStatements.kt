@@ -15,7 +15,12 @@ class AddMissingUseStatements {
         if (PRIMITIVES.contains(foldDocBlockTypeHintedArray.invoke(fqcn))) return false
 
         val scopeHolder = PhpCodeInsightUtil.findScopeForUseOperator(namespace)
-        if (scopeHolder != null && PhpCodeInsightUtil.findImportedName(scopeHolder, fqcn, PhpUseKeyword.CLASS) == null && PhpCodeInsightUtil.canImport(scopeHolder, fqcn, PhpUseKeyword.CLASS)) {
+        if (scopeHolder != null && PhpCodeInsightUtil.findImportedName(
+                scopeHolder,
+                fqcn,
+                PhpUseKeyword.CLASS
+            ) == null && PhpCodeInsightUtil.canImport(scopeHolder, fqcn, PhpUseKeyword.CLASS)
+        ) {
             PhpAliasImporter.insertUseStatement(fqcn, alias, scopeHolder)
         }
         return true

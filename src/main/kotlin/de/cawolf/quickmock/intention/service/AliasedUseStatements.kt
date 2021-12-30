@@ -16,7 +16,14 @@ class AliasedUseStatements {
         val useLists = PhpCodeInsightUtil.collectImports(containingClass?.parent?.parent as PhpPsiElement)
         for (useList in useLists) {
             if (useList.declarations.size == 1) {
-                useList.declarations[0].aliasName?.let { aliasedUseStatements.put((useList.firstPsiChild?.firstPsiChild as ClassReferenceImpl).type.toString(), it) }
+                useList.declarations[0].aliasName.let {
+                    if (it != null) {
+                        aliasedUseStatements.put(
+                            (useList.firstPsiChild!!.firstPsiChild as ClassReferenceImpl).type.toString(),
+                            it
+                        )
+                    }
+                }
             }
         }
         return aliasedUseStatements

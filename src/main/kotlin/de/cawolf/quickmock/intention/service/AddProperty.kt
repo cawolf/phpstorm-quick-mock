@@ -10,19 +10,32 @@ import com.jetbrains.php.lang.psi.elements.PhpClass
 import de.cawolf.quickmock.intention.PRIMITIVES
 
 class AddProperty {
-    fun invoke(project: Project, parameter: Parameter, parameterName: String, currentAnchor: PsiElement, clazz: PhpClass, addDocBlockForMembers: Boolean): PsiElement {
+    fun invoke(
+        project: Project,
+        parameter: Parameter,
+        parameterName: String,
+        currentAnchor: PsiElement,
+        clazz: PhpClass,
+        addDocBlockForMembers: Boolean
+    ): PsiElement {
         val classFieldsType = IElementType.enumerate { it.toString() == "Class fields" }.first()
         val docCommentType = IElementType.enumerate { it.toString() == "PhpDocComment" }.first()
 
-        val field = PhpPsiElementFactory.createFromText(project, classFieldsType, "class C { private \$$parameterName; }")
+        val field =
+            PhpPsiElementFactory.createFromText(project, classFieldsType, "class C { private \$$parameterName; }")
         val fieldAnchor = clazz.addAfter(field, currentAnchor)
 
         if (addDocBlockForMembers) {
-            val foldDocBlockTypeHintedArray = ServiceManager.getService(project, FoldDocBlockTypeHintedArray::class.java)
+            val foldDocBlockTypeHintedArray =
+                ServiceManager.getService(project, FoldDocBlockTypeHintedArray::class.java)
 
             val foldedType = foldDocBlockTypeHintedArray.invoke(parameter.type.toString())
             val objectProphecy = if (PRIMITIVES.contains(foldedType)) "" else "|ObjectProphecy"
-            val docBlock = PhpPsiElementFactory.createFromText(project, docCommentType, "/** @var ${determineTypeHint(parameter, foldedType)}$objectProphecy */\n\$foo = null;")
+            val docBlock = PhpPsiElementFactory.createFromText(
+                project,
+                docCommentType,
+                "/** @var ${determineTypeHint(parameter, foldedType)}$objectProphecy */\n\$foo = null;"
+            )
             clazz.addBefore(docBlock, fieldAnchor)
         }
 
@@ -33,7 +46,8 @@ class AddProperty {
         return when {
             foldedType == "" -> "mixed"
             foldedType.contains('\\') -> when {
-                foldedType.split('\\').last() != parameter.node.firstChildNode.text -> parameter.node.firstChildNode.text
+                foldedType.split('\\')
+                    .last() != parameter.node.firstChildNode.text -> parameter.node.firstChildNode.text
                 else -> foldedType.split('\\').last()
             }
             else -> foldedType
