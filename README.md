@@ -1,5 +1,5 @@
 # Quick Mock
-[![Build Status](https://travis-ci.com/cawolf/phpstorm-quick-mock.svg?branch=master)](https://travis-ci.com/cawolf/phpstorm-quick-mock)
+[![Tests](https://github.com/cawolf/phpstorm-quick-mock/actions/workflows/test.yml/badge.svg)](https://github.com/cawolf/phpstorm-quick-mock/actions/workflows/test.yml)
 [![Version](https://img.shields.io/jetbrains/plugin/v/11165?label=version)](https://plugins.jetbrains.com/plugin/11165-quick-mock)
 [![Downloads](https://img.shields.io/jetbrains/plugin/d/11165)](https://plugins.jetbrains.com/plugin/11165-quick-mock)
 
@@ -13,7 +13,7 @@ Now, you can use this PHPStorm plugin to automatically generate mocks for these 
 constructor argument list, trigger code intentions (default: `ALT + ENTER`) and select `Quick Mock: add constructor prophecies` - done!
 
 ## Install
-Install the plugin by going to `Settings -> Plugins -> Browse repositories` and then search for `Quick Mock`
+Install the plugin by going to `Settings -> Plugins -> Marketplace` and then search for `Quick Mock`
 
 ## Options
 You can configure the plugin under `Languages and Frameworks -> PHP -> Quick Mock`. Available options:
