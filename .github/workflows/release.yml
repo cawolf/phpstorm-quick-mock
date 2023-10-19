@@ -10,7 +10,7 @@ jobs:
 
     steps:
       - name: check out sources
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: install fonts
         run: sudo apt-get update -y && sudo apt-get install -y fonts-dejavu fontconfig
       - name: setup java
