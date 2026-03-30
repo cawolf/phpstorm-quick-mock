@@ -18,6 +18,6 @@ jobs:
           distribution: temurin
           java-version: '11'
       - name: test plugin
-        uses: gradle/gradle-build-action@v2
+        uses: gradle/gradle-build-action@v3
         with:
           arguments: :cleanTest :test check verifyPlugin
